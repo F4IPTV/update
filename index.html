@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>О программе</title>
+  <style>
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 32px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent; /* убрать серую подсветку на тачах */
+    }
+
+    .hero-image {
+      max-height: 25vh;          /* четверть экрана по высоте */
+      max-width: 80vw;
+      width: auto; height: auto;
+      object-fit: contain;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    h1 { font-size: 22px; margin: 0 0 12px; }
+    p  { margin: 0 0 24px; line-height: 1.5; }
+
+    .buttons { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+    button {
+      background: #1e293b;
+      color: #ffffff;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      min-width: 180px;
+      outline: none;
+      transition: background .18s ease, color .18s ease, transform .06s ease;
+      -webkit-appearance: none;
+      touch-action: manipulation;
+    }
+
+    /* Визуальный отклик при нажатии (тач/мышь) */
+    button:active,
+    button.is-pressed {
+      background: #38bdf8;
+      color: #0f172a;
+      transform: translateY(1px) scale(0.99);
+    }
+
+    /* Фокус только для клавиатуры/пульта */
+    button:focus-visible {
+      background: #38bdf8;
+      color: #0f172a;
+      box-shadow: 0 0 0 4px rgba(56,189,248,0.25);
+    }
+
+    button::-moz-focus-inner { border: 0; }
+
+    .hint { margin-top: 32px; font-size: 14px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <!-- Замените src на ваш путь к картинке -->
+  <img
+    class="hero-image"
+    src="https://www.tvboxsetup.ru/sv/QR_tg.png"
+    alt="Нет подключения"
+    onerror="this.style.display='none';" />
+
+  <h1>FastInstaller</h1>
+  <p>Канал в телеграм: t.me/fastInstaller</p>
+
+  <div class="buttons">
+    <!-- <button id="site"     type="button">Сайт программы</button> -->
+    <button id="telegram" type="button" class="secondary">Telegram</button>
+  </div>
+
+  <div class="hint">Ссылки откроются во внешнем браузере или в Telegram, если он установлен.</div>
+  <div class="hint">Разработчик: Filin4ik</div>
+
+  <script>
+    // ====== НАСТРОЙКИ ССЫЛОК (ЗАМЕНИТЕ НА СВОИ) ======
+    const TELEGRAM_CHANNEL_URL  = "https://t.me/fastInstaller"; // ← ваш канал
+    // ===================================================
+
+    // В некоторых мобильных браузерах :active не срабатывает без обработчика
+    document.addEventListener('touchstart', function(){}, {passive: true});
+
+    function wirePressFeedback(btn) {
+      const add = () => btn.classList.add('is-pressed');
+      const remove = () => btn.classList.remove('is-pressed');
+      btn.addEventListener('pointerdown', add);
+      btn.addEventListener('pointerup', remove);
+      btn.addEventListener('pointercancel', remove);
+      btn.addEventListener('mouseleave', remove);
+      btn.addEventListener('blur', remove);
+    }
+
+    function openExternal(url) {
+      // Предпочтительно через Android-интерфейс (если есть)
+      try {
+        if (window.AndroidInterface) {
+          if (typeof AndroidInterface.openExternalLink === 'function') {
+            AndroidInterface.openExternalLink(url);
+            return;
+          }
+          if (typeof AndroidInterface.openLink === 'function') {
+            AndroidInterface.openLink(url);
+            return;
+          }
+          if (typeof AndroidInterface.openUrl === 'function') {
+            AndroidInterface.openUrl(url);
+            return;
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+      // Фолбэк: обычный переход (может открыться внутри WebView, если не перехватить shouldOverrideUrlLoading)
+      window.location.href = url;
+    }
+
+    const tgBtn   = document.getElementById('telegram');
+
+    if (tgBtn) {
+      wirePressFeedback(tgBtn);
+      tgBtn.addEventListener('click', () => openExternal(TELEGRAM_CHANNEL_URL));
+    }
+  </script>
+</body>
+</html>
