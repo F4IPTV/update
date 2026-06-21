@@ -1,6 +1,6 @@
 {
-  "packageName": "com.google.android.webview",
-  "versionCode": 599308000,
-  "versionName": "118.0.5993.80",
-  "apkUrl": "https://tvboxsetup.ru/fastinstaller/WebView/WebView_upd.apk"
+  "packageName": "com.filin4ik.fastInstaller",
+  "versionCode": 204,
+  "versionName": "2.0.4",
+  "apkUrl": "https://raw.githubusercontent.com/F4IPTV/update/main/app-release.apk"
 }
